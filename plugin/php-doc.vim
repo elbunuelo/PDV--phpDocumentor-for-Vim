@@ -82,7 +82,8 @@ let g:pdv_cfg_Author = "Tobias Schlitt <toby@php.net>"
 let g:pdv_cfg_Copyright = "1997-2005 The PHP Group"
 let g:pdv_cfg_License = "PHP Version 3.0 {@link http://www.php.net/license/3_0.txt}"
 
-let g:pdv_cfg_ReturnVal = "void"
+"let g:pdv_cfg_ReturnVal = "void"
+let g:pdv_cfg_ReturnVal = "null"
 
 " Wether to create @uses tags for implementation of interfaces and inheritance
 let g:pdv_cfg_Uses = 1
@@ -92,7 +93,7 @@ let g:pdv_cfg_Uses = 1
 let g:pdv_cfg_paste = 1
 
 " Wether for PHP5 code PHP4 tags should be set, like @access,... (1|0)?
-let g:pdv_cfg_php4always = 1
+let g:pdv_cfg_php4always = 0
  
 " Wether to guess scopes after PEAR coding standards:
 " $_foo/_bar() == <private|protected> (1|0)?
@@ -276,8 +277,11 @@ func! PhpDocFunc()
     let l:txtBOL = g:pdv_cfg_BOL . l:indent
 	
     exe l:txtBOL . g:pdv_cfg_CommentHead . g:pdv_cfg_EOL
-	exe l:txtBOL . g:pdv_cfg_Comment1 . funcname . " " . g:pdv_cfg_EOL
-    exe l:txtBOL . g:pdv_cfg_Commentn . g:pdv_cfg_EOL
+	exe l:txtBOL . g:pdv_cfg_Comment1 . g:pdv_cfg_EOL
+
+    if l:parameters != ","
+        exe l:txtBOL . g:pdv_cfg_Commentn . g:pdv_cfg_EOL
+    endif
 
 	while (l:parameters != ",") && (l:parameters != "")
 		" Save 1st parameter
@@ -313,6 +317,7 @@ func! PhpDocFunc()
     if l:scope != ""
     	exe l:txtBOL . g:pdv_cfg_Commentn . "@access " . l:scope . g:pdv_cfg_EOL
     endif
+	exe l:txtBOL . g:pdv_cfg_Commentn . g:pdv_cfg_EOL
 	exe l:txtBOL . g:pdv_cfg_Commentn . "@return " . g:pdv_cfg_ReturnVal . g:pdv_cfg_EOL
 
 	" Close the comment block.
